@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+  <h2>🏭 Ceramic Factory Dashboard</h2>
+
+  <div class="mb-3">
+    <input id="searchBox" type="text" class="form-control" placeholder="Search product">
+    <button onclick="searchProduct()" class="btn btn-success mt-2">Search</button>
+  </div>
+
+  <h3>📦 Inventory</h3>
+  <table class="table table-bordered" id="inventoryTable">
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Size</th><th>Finish</th><th>Price</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadInventory() {
+      let res = await fetch("/inventory");
+      let data = await res.json();
+      let tableBody = document.querySelector("#inventoryTable tbody");
+      tableBody.innerHTML = "";
+      data.forEach(row => {
+        let tr = document.createElement("tr");
+        tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[5]}</td>`;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    async function searchProduct() {
+      let q = document.getElementById("searchBox").value;
+      let res = await fetch("/search?q=" + q);
+      let data = await res.json();
+      let tableBody = document.querySelector("#inventoryTable tbody");
+      tableBody.innerHTML = "";
+      data.forEach(row => {
+        let tr = document.createElement("tr");
+        tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[5]}</td>`;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    loadInventory();
+  </script>
+</body>
+</html>
